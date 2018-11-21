@@ -14,6 +14,8 @@ class ViewController: UIViewController  {
    
     @IBOutlet weak var adveriseView: GADBannerView!
     
+     var interstitial: GADInterstitial?
+    
 //    lazy var adBannerView: GADBannerView = {
 ////        let adBannerView = GADBannerView(adSize: kGADAdSizeSmartBannerPortrait)
 //                let adBannerView = GADBannerView(adSize: kGADAdSizeBanner)
@@ -30,16 +32,35 @@ class ViewController: UIViewController  {
         adveriseView.load(GADRequest())
         
         //test ads
-      adveriseView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+      adveriseView.adUnitID = "ca-app-pub-6283389635676693/2380676672"
        
         //production ads
        
         adveriseView.delegate = self
         adveriseView.rootViewController = self
         
+//         interstitial = createAndLoadInterstitial()
+        
+        
         
         // Do any additional setup after loading the view, typically from a nib.
     }
+    
+    private func createAndLoadInterstitial() -> GADInterstitial? {
+        interstitial = GADInterstitial(adUnitID: "ca-app-pub-6283389635676693/6156270153")
+        
+        guard let interstitial = interstitial else {
+            return nil
+        }
+        
+        let request = GADRequest()
+        request.testDevices = [ kGADSimulatorID ]
+        interstitial.load(request)
+        interstitial.delegate = self
+        
+        return interstitial
+    }
+    
 
 
 }
@@ -57,6 +78,20 @@ extension ViewController : GADBannerViewDelegate {
     func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
         print("fail to load Ads")
         print(error.localizedDescription)
+    }
+}
+
+
+extension ViewController : GADInterstitialDelegate {
+    
+    func interstitialDidReceiveAd(_ ad: GADInterstitial) {
+        print("Interstitial loaded successfully")
+        ad.present(fromRootViewController: self)
+    
+    }
+    
+    func interstitialDidFail(toPresentScreen ad: GADInterstitial) {
+          print("Fail to receive interstitial")
     }
 }
 
