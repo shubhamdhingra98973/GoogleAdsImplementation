@@ -1,0 +1,6 @@
+framework module Pods_GoogleAddsImplementationTests {
+  umbrella header "Pods-GoogleAddsImplementationTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
